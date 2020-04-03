@@ -12,6 +12,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { HomeScreen } from './src/components/HomeScreen'
 import { HelpForm } from './src/components/HelpForm'
+import { CapturePhoto } from './src/components/CapturePhoto'
 
 
 const Stack = createStackNavigator();
@@ -38,6 +39,7 @@ export default class App extends React.Component {
         <Stack.Navigator>
           <Stack.Screen name="Sahaya" component={HomeScreen} />
           <Stack.Screen name="Raise Help" component={HelpForm} />
+          <Stack.Screen options={{title: 'Take Photo'}} name="CapturePhoto" component={CapturePhoto} />
         </Stack.Navigator>
       </NavigationContainer>
     )

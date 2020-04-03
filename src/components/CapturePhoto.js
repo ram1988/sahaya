@@ -25,7 +25,7 @@ export class CapturePhoto extends Component
 {
  static navigationOptions =
  {
-    title: 'HelpForm',
+    title: 'CapturePhoto',
  };
 
  takePicture = async function(camera) {
