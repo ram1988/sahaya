@@ -7,6 +7,8 @@ import {
   Button
 } from 'react-native'
 import { RNCamera } from 'react-native-camera';
+import { capturePhoto } from '../actions/capturePhotoAction';
+import { connect } from 'react-redux';
 
 const PendingView = () => (
   <View
@@ -21,7 +23,7 @@ const PendingView = () => (
   </View>
 );
 
-export class CapturePhoto extends Component
+class CapturePhoto extends Component
 {
  static navigationOptions =
  {
@@ -33,6 +35,7 @@ export class CapturePhoto extends Component
   const data = await camera.takePictureAsync(options);
   //  eslint-disable-next-line
   console.log(data.uri);
+  this.props.takePhoto(data.uri);
 };
 
  render()
@@ -86,3 +89,12 @@ export class CapturePhoto extends Component
     },
   })
   
+  const mapDispatchToProps = dispatch => {
+    return {
+      takePhoto: (photoURI) => {
+        dispatch(capturePhoto(photoURI));
+      },
+    }
+  };
+  
+  export default connect(null, mapDispatchToProps)(CapturePhoto);

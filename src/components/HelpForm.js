@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { StyleSheet, TouchableOpacity, Text, View, Button } from "react-native";
+import { StyleSheet, TouchableOpacity, Text, View, Button, Alert } from "react-native";
 
 import { CheckBox, Textarea, Form } from "native-base";
+import { connect } from 'react-redux';
 
-export class HelpForm extends Component {
+class HelpForm extends Component {
   static navigationOptions = {
     title: "HelpForm",
   };
@@ -26,6 +27,9 @@ export class HelpForm extends Component {
       selectedLang3,
       selectedLang4,
     } = this.state;
+
+    const { capturedPhotoURI } = this.props;
+    
     return (
       <View style={styles.container}>
         <Text style={styles.header}>Type of Help?</Text>
@@ -171,3 +175,11 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
 });
+
+const mapStateToProps = ({cameraActionReducers}) => {
+  return {
+    capturedPhotoURI: cameraActionReducers.photoURI
+  };
+};
+
+export default connect(mapStateToProps, null)(HelpForm);
