@@ -6,9 +6,11 @@ import {
   View,
   Button
 } from 'react-native'
+import { connect } from 'react-redux';
+import Geolocation from '@react-native-community/geolocation';
+import Geocoder from 'react-native-geocoding';
 import { RNCamera } from 'react-native-camera';
 import { capturePhoto } from '../actions/capturePhotoAction';
-import { connect } from 'react-redux';
 
 const PendingView = () => (
   <View
@@ -30,12 +32,31 @@ class CapturePhoto extends Component
     title: 'CapturePhoto',
  };
 
+ goBack = () => {
+  this.props.navigation.goBack(null);
+ };
+
+ findAddress = async () => {
+    const address = await new Promise ( (resolve, reject) => {
+        Geolocation.getCurrentPosition(
+          async(position) => {
+            const address = await Geocoder.from({latitude: position.coords.latitude, longitude: position.coords.longitude })
+            resolve(address.results[0].formatted_address);
+          },
+          error => Alert.alert(error.message),
+          { enableHighAccuracy: true, timeout: 5000, maximumAge: 1000 }
+        );
+      }
+    );
+    return address;
+ };
+
  takePicture = async function(camera) {
   const options = { quality: 0.5, base64: true };
   const data = await camera.takePictureAsync(options);
-  //  eslint-disable-next-line
-  console.log(data.uri);
-  this.props.takePhoto(data.uri);
+  const address = await this.findAddress();
+  this.props.takePhoto(data.uri, address);
+  this.goBack();
 };
 
  render()
@@ -91,8 +112,12 @@ class CapturePhoto extends Component
   
   const mapDispatchToProps = dispatch => {
     return {
-      takePhoto: (photoURI) => {
-        dispatch(capturePhoto(photoURI));
+      takePhoto: (photoURI, address) => {
+        const payload = {
+          photoURI: photoURI,
+          photoAddress: address
+        }
+        dispatch(capturePhoto(payload));
       },
     }
   };

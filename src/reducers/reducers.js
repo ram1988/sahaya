@@ -6,7 +6,7 @@ import { StyleSheet, TouchableOpacity, Text, View, Button, Alert } from "react-n
 function cameraActionReducers(state = {}, action) {
   switch (action.type) {
     case CAPTURE_PHOTO:
-      return {...state, photoURI: action.payload.photoURI};
+      return {...state, photoURI: action.payload.photoURI, photoAddress: action.payload.photoAddress};
     default:
       return state;
   }

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { StyleSheet, TouchableOpacity, Text, View, Button, Alert } from "react-native";
+import { StyleSheet, TouchableOpacity, Text, View, Button, Alert, Image, ScrollView } from "react-native";
+
 
 import { CheckBox, Textarea, Form } from "native-base";
 import { connect } from 'react-redux';
@@ -20,6 +21,8 @@ class HelpForm extends Component {
     this.props.navigation.navigate("CapturePhoto");
   };
 
+  
+
   render() {
     const {
       selectedLang1,
@@ -28,10 +31,27 @@ class HelpForm extends Component {
       selectedLang4,
     } = this.state;
 
-    const { capturedPhotoURI } = this.props;
+    const { capturedPhotoURI, capturedPhotoAddress } = this.props;
+    console.log("capturedPhotoURI--->"+capturedPhotoURI)
+    console.log("capturedPhotoAddress--->"+capturedPhotoAddress)
     
     return (
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
+         { capturedPhotoURI && (
+                <Image
+                source={{uri: capturedPhotoURI, isStatic:true}}
+                style={{width: 100, height: 100}}
+                />
+              )}
+        { capturedPhotoAddress && (
+              <View>
+                  <Text style={{ ...styles.checkBoxTxt, color: "gray", fontWeight: "bold" }}>Photo Location:  </Text>
+                  <Text style={{ ...styles.checkBoxTxt, color: "gray", fontWeight: "bold" }}>{capturedPhotoAddress}</Text>
+                </View>
+              )}
+        <TouchableOpacity style={styles.submit} onPress = { this.goToCapturePhoto }>
+          <Text style={{ color: "white" }}>Take Photo</Text>
+        </TouchableOpacity>
         <Text style={styles.header}>Type of Help?</Text>
         <View style={styles.item}>
           <CheckBox
@@ -121,35 +141,36 @@ class HelpForm extends Component {
           </Text>
           <Textarea
             style={{ ...styles.textBoxArea }}
-            rowSpan={10}
+            rowSpan={5}
             bordered
             placeholder="Additional Information of the person 
             for the authorities to spruce up the rescue efforts. "
           />
         </View>
-        <TouchableOpacity style={styles.submit} onPress = { this.goToCapturePhoto }>
-          <Text style={{ color: "white" }}>Take Photo</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.submit}>
+        <TouchableOpacity style={styles.submit} onPress = { this.findCoordinates }>
           <Text style={{ color: "white" }}>SUBMIT</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#f6f6f6",
     alignItems: "center",
     justifyContent: "center",
   },
   header: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#364f6b",
-    marginBottom: 40,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  logo: {
+    width: 660,
+    height: 580,
   },
   item: {
     width: "80%",
@@ -178,7 +199,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({cameraActionReducers}) => {
   return {
-    capturedPhotoURI: cameraActionReducers.photoURI
+    capturedPhotoURI: cameraActionReducers.photoURI,
+    capturedPhotoAddress: cameraActionReducers.photoAddress
   };
 };
 
