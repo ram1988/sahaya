@@ -81,8 +81,8 @@ export class HomeScreen extends Component {
            <View style={{marginBottom: 20, alignItems: 'center', width: 350}}>
   
             <Text style = { styles.text }> 
-                    Help the people in need by reporting their status to the NGOs or the government authorities.
-                    The authorities will take care of them. Come forward to help and inspire to create a generous society!!!
+                    Help our people in need by reporting their status to NGOs or the government authorities.
+                    Come forward to help, inspire and encourage to create a generous society!!!
              </Text>
              <TouchableOpacity style={styles.submit} onPress = { this.goToHelpScreen } >
                     <Text style={{ color: "white" }}>Raise Help!</Text>

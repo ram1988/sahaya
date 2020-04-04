@@ -49,6 +49,7 @@ class HelpForm extends Component {
 
     this.props.saveReports(reportObj);
     this.goBack();
+    Alert.alert('Case submitted!')
   }
   
 
@@ -172,8 +173,8 @@ class HelpForm extends Component {
             style={{ ...styles.textBoxArea }}
             rowSpan={5}
             bordered
-            placeholder="Additional Information of the person 
-            for the authorities to spruce up the rescue efforts. "
+            placeholder="Any Additional Information of the person/situation 
+            to help the authorities with their rescue efforts."
             onChangeText={(additionalInfo) => this.setState({additionalInfo})}
           />
         </View>
