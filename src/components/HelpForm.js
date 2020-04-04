@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, TouchableOpacity, Text, View, Button, Alert, Image, ScrollView } from "react-native";
 import { CheckBox, Textarea, Form } from "native-base";
 import { connect } from 'react-redux';
+import sendToWhatsApp from '../services/sendMessage';
 import { saveReports } from '../actions/saveReportsAction';
 
 class HelpForm extends Component {
@@ -23,7 +24,8 @@ class HelpForm extends Component {
 
   goBack = () => {
     this.props.navigation.goBack(null);
-   };
+  };
+
 
   saveReports = () => {
     const reportObj = {};
@@ -45,9 +47,12 @@ class HelpForm extends Component {
     reportObj['type_of_help'] = selectedHelps;
     reportObj['additional_info'] = this.state.additionalInfo;
     reportObj['captured_photo_uri'] = this.props.capturedPhotoURI;
-    reportObj['captured_photo_location'] = this.props.capturedPhotoAddress;
+    reportObj['location_details'] = this.props.locationDetails;
+
+    console.log('loca details-->'+this.props.locationDetails);
 
     this.props.saveReports(reportObj);
+    sendToWhatsApp(reportObj);
     this.goBack();
     Alert.alert('Case submitted!')
   }
@@ -61,7 +66,8 @@ class HelpForm extends Component {
       selectedLang4,
     } = this.state;
 
-    const { capturedPhotoURI, capturedPhotoAddress } = this.props;
+    const { capturedPhotoURI, locationDetails } = this.props;
+    const capturedPhotoAddress = locationDetails ? locationDetails.country : null;
     console.log("capturedPhotoURI--->"+capturedPhotoURI)
     console.log("capturedPhotoAddress--->"+capturedPhotoAddress)
     
@@ -229,9 +235,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({cameraActionReducers}) => {
+  console.log(JSON.stringify(cameraActionReducers))
   return {
     capturedPhotoURI: cameraActionReducers.photoURI,
-    capturedPhotoAddress: cameraActionReducers.photoAddress
+    locationDetails: cameraActionReducers.locDetails
   };
 };
 

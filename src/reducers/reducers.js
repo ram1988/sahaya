@@ -6,7 +6,7 @@ import { SAVE_REPORTS } from '../actions/saveReportsAction';
 function cameraActionReducers(state = {}, action) {
   switch (action.type) {
     case CAPTURE_PHOTO:
-      return {...state, photoURI: action.payload.photoURI, photoAddress: action.payload.photoAddress};
+      return {...state, photoURI: action.payload.photoURI, locDetails: action.payload.locDetails};
     default:
       return state;
   }

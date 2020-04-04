@@ -68,7 +68,7 @@ export class HomeScreen extends Component {
                     Location:
                   </Text>
                    <Text>
-                    {report.captured_photo_location}
+                    {report.location_details ? report.location_details.country : ''}
                   </Text>
                 </Body>
               </CardItem>
@@ -91,7 +91,7 @@ export class HomeScreen extends Component {
            </View>
           <View style={{marginBottom: 20, width: 400, alignItems: 'center'}}>
           <Text style = { styles.text }> 
-                   Reports:             
+                   Reported Cases:             
           </Text>
             <Content style={{marginBottom: 200, width:300}}>
               {reportsList}

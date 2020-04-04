@@ -42,7 +42,12 @@ class CapturePhoto extends Component
           async(position) => {
             const address = await Geocoder.from({latitude: position.coords.latitude, longitude: position.coords.longitude })
             const country = address.results[0].formatted_address.split(",")[2].trim();
-            resolve(country);
+            const locDetails = {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              country: country
+            }
+            resolve(locDetails);
           },
           error => console.log(error.message),
           { enableHighAccuracy: true, timeout: 10000, maximumAge: 1000 }
@@ -55,8 +60,8 @@ class CapturePhoto extends Component
  takePicture = async function(camera) {
   const options = { quality: 0.5, base64: true };
   const data = await camera.takePictureAsync(options);
-  const address = await this.findAddress();
-  this.props.takePhoto(data.uri, address);
+  const locDetails = await this.findAddress();
+  this.props.takePhoto(data.uri, locDetails);
   this.goBack();
 };
 
@@ -113,10 +118,10 @@ class CapturePhoto extends Component
   
   const mapDispatchToProps = dispatch => {
     return {
-      takePhoto: (photoURI, address) => {
+      takePhoto: (photoURI, locDetails) => {
         const payload = {
           photoURI: photoURI,
-          photoAddress: address
+          locDetails: locDetails
         }
         dispatch(capturePhoto(payload));
       },
