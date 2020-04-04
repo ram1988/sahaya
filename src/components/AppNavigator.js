@@ -2,7 +2,7 @@ import React from 'react'
 import { NavigationContainer, ScrollView } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { HomeScreen } from './HomeScreen'
+import HomeScreen from './HomeScreen'
 import HelpForm  from './HelpForm'
 import CapturePhoto from './CapturePhoto'
 

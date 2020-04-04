@@ -41,7 +41,8 @@ class CapturePhoto extends Component
         Geolocation.getCurrentPosition(
           async(position) => {
             const address = await Geocoder.from({latitude: position.coords.latitude, longitude: position.coords.longitude })
-            resolve(address.results[0].formatted_address);
+            const country = address.results[0].formatted_address.split(",")[2].trim();
+            resolve(country);
           },
           error => console.log(error.message),
           { enableHighAccuracy: true, timeout: 10000, maximumAge: 1000 }

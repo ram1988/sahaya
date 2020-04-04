@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { StyleSheet, TouchableOpacity, Text, View, Button, Alert, Image, ScrollView } from "react-native";
-
-
 import { CheckBox, Textarea, Form } from "native-base";
 import { connect } from 'react-redux';
+import { saveReports } from '../actions/saveReportsAction';
 
 class HelpForm extends Component {
   static navigationOptions = {
@@ -15,12 +14,42 @@ class HelpForm extends Component {
     selectedLang2: false,
     selectedLang3: false,
     selectedLang4: false,
+    additionalInfo: ''
   };
 
   goToCapturePhoto = () => {
     this.props.navigation.navigate("CapturePhoto");
   };
 
+  goBack = () => {
+    this.props.navigation.goBack(null);
+   };
+
+  saveReports = () => {
+    const reportObj = {};
+    const selectedHelps = [];
+
+    if( this.state.selectedLang1 ) {
+      selectedHelps.push("Medical Attention");
+    }
+    if( this.state.selectedLang2 ) {
+      selectedHelps.push("Food");
+    }
+    if( this.state.selectedLang3 ) {
+      selectedHelps.push("Shelter");
+    }
+    if( this.state.selectedLang4 ) {
+      selectedHelps.push("Others");
+    }
+
+    reportObj['type_of_help'] = selectedHelps;
+    reportObj['additional_info'] = this.state.additionalInfo;
+    reportObj['captured_photo_uri'] = this.props.capturedPhotoURI;
+    reportObj['captured_photo_location'] = this.props.capturedPhotoAddress;
+
+    this.props.saveReports(reportObj);
+    this.goBack();
+  }
   
 
   render() {
@@ -145,10 +174,11 @@ class HelpForm extends Component {
             bordered
             placeholder="Additional Information of the person 
             for the authorities to spruce up the rescue efforts. "
+            onChangeText={(additionalInfo) => this.setState({additionalInfo})}
           />
         </View>
-        <TouchableOpacity style={styles.submit} onPress = { this.findCoordinates }>
-          <Text style={{ color: "white" }}>SUBMIT</Text>
+        <TouchableOpacity style={styles.submit} onPress = { this.saveReports }>
+          <Text style={{ color: "white" }}>Submit</Text>
         </TouchableOpacity>
       </ScrollView>
     );
@@ -204,4 +234,12 @@ const mapStateToProps = ({cameraActionReducers}) => {
   };
 };
 
-export default connect(mapStateToProps, null)(HelpForm);
+const mapDispatchToProps = dispatch => {
+  return {
+    saveReports: (report) => {
+      dispatch(saveReports(report));
+    },
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HelpForm);
