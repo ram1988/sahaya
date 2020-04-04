@@ -43,8 +43,8 @@ class CapturePhoto extends Component
             const address = await Geocoder.from({latitude: position.coords.latitude, longitude: position.coords.longitude })
             resolve(address.results[0].formatted_address);
           },
-          error => Alert.alert(error.message),
-          { enableHighAccuracy: true, timeout: 5000, maximumAge: 1000 }
+          error => console.log(error.message),
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 1000 }
         );
       }
     );
